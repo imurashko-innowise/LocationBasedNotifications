@@ -2,6 +2,7 @@ package com.sap.codelab.view.detail
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isGone
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.sap.codelab.databinding.ActivityViewMemoBinding
@@ -48,8 +49,11 @@ internal class ViewMemo : AppCompatActivity() {
         binding.contentCreateMemo.run {
             memoTitle.setText(memo.title)
             memoDescription.setText(memo.description)
+            locationLatitude.text = memo.reminderLatitude.toString()
+            locationLongitude.text = memo.reminderLongitude.toString()
             memoTitle.isEnabled = false
             memoDescription.isEnabled = false
+            locationPicker.isGone = true
         }
     }
 }

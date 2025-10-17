@@ -28,6 +28,14 @@
             android:name="com.sap.codelab.view.detail.ViewMemo"
             android:exported="false"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".view.locationpicker.LocationPicker"
+            android:exported="false"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyA_3afSsMxXsV-VBZH2jgDL5tAcLsU7CN0" />
     </application>
 
 </manifest>

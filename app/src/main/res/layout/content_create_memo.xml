@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/memo_content_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/padding_activity"
@@ -38,6 +39,85 @@
             android:hint="@string/memo_text" />
 
     </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/location_section_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/location_label"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@id/memo_description_container"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- Latitude Label -->
+    <TextView
+        android:id="@+id/location_latitude_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/location_latitude_label"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/location_latitude"
+        app:layout_constraintTop_toBottomOf="@id/location_section_label"
+        app:layout_constraintBottom_toBottomOf="@+id/location_latitude"
+        app:layout_constraintHorizontal_weight="1"/>
+
+    <!-- Latitude Value -->
+    <TextView
+        android:id="@+id/location_latitude"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/memo_location_default"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@id/location_latitude_label"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/location_latitude_label"
+        app:layout_constraintBottom_toBottomOf="@id/location_latitude_label"
+        app:layout_constraintHorizontal_weight="1"
+        android:gravity="start"/>
+
+    <!-- Longitude Label -->
+    <TextView
+        android:id="@+id/location_longitude_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/location_longitude_label"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/location_longitude"
+        app:layout_constraintTop_toBottomOf="@id/location_latitude_label"
+        app:layout_constraintBottom_toBottomOf="@+id/location_longitude"
+        app:layout_constraintHorizontal_weight="1"/>
+
+    <!-- Longitude Value -->
+    <TextView
+        android:id="@+id/location_longitude"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/memo_location_default"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@id/location_longitude_label"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/location_longitude_label"
+        app:layout_constraintBottom_toBottomOf="@id/location_longitude_label"
+        app:layout_constraintHorizontal_weight="1"
+        android:gravity="start"/>
+
+    <!-- Pick a Location Button -->
+    <Button
+        android:id="@+id/location_picker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/action_launch_location_picker"
+        app:layout_constraintTop_toBottomOf="@id/location_longitude"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="24dp"/>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
