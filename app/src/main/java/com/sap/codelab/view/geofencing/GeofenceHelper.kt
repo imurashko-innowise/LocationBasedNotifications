@@ -10,6 +10,12 @@ import com.google.android.gms.location.GeofencingClient
 import com.google.android.gms.location.GeofencingRequest
 import com.google.android.gms.location.LocationServices
 import com.sap.codelab.model.Memo
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.launch
 
 internal object GeofenceHelper {
 
@@ -17,6 +23,19 @@ internal object GeofenceHelper {
 
     fun initialize(context: Context) {
         geofencingClient = LocationServices.getGeofencingClient(context)
+    }
+
+    @RequiresPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+    fun registerAllGeofences(context: Context, memos: List<Memo>) {
+        val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+
+        scope.launch {
+            memos.map { memo ->
+                async {
+                    registerGeofence(context, memo)
+                }
+            }.awaitAll()
+        }
     }
 
     @RequiresPermission(Manifest.permission.ACCESS_FINE_LOCATION)

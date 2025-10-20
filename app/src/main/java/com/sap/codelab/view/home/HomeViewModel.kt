@@ -18,12 +18,12 @@ internal class HomeViewModel : ViewModel() {
     private var isShowAll = false
     private val _memos: MutableStateFlow<List<Memo>> = MutableStateFlow(listOf())
     val memos: StateFlow<List<Memo>> = _memos
-    private var _shouldAskForPermissions = true
-    val shouldAskForPermissions
-        get() = _shouldAskForPermissions
+    private var _isFirstLaunch = true
+    val isFirstLaunch
+        get() = _isFirstLaunch
 
-    fun onAskForPermissions() {
-        _shouldAskForPermissions = false
+    fun onFirstLaunch() {
+        _isFirstLaunch = false
     }
     /**
      * Loads all memos.

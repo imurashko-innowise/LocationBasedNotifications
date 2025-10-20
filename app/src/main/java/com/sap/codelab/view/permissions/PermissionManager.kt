@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.pm.PackageManager
 import androidx.activity.result.ActivityResultRegistry
 import androidx.activity.result.contract.ActivityResultContracts.RequestMultiplePermissions
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 
 internal class PermissionManager(
@@ -79,8 +78,7 @@ internal class PermissionManager(
 
     private fun Permission.isGranted() = permissions.all { hasPermission(it) }
 
-    private fun hasPermission(permission: String) = ContextCompat.checkSelfPermission(
-        context,
+    private fun hasPermission(permission: String) = context.checkSelfPermission(
         permission
     ) == PackageManager.PERMISSION_GRANTED
 

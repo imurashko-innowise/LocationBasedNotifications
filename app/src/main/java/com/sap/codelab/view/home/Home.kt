@@ -1,7 +1,9 @@
 package com.sap.codelab.view.home
 
+import android.Manifest
 import com.sap.codelab.view.permissions.PermissionManager
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -17,6 +19,8 @@ import com.sap.codelab.view.permissions.Permission
 import com.sap.codelab.R
 import com.sap.codelab.databinding.ActivityHomeBinding
 import com.sap.codelab.model.Memo
+import com.sap.codelab.repository.Repository
+import com.sap.codelab.utils.coroutines.ScopeProvider
 import com.sap.codelab.utils.extensions.showToast
 import com.sap.codelab.view.create.CreateMemo
 import com.sap.codelab.view.detail.BUNDLE_MEMO_ID
@@ -64,9 +68,10 @@ internal class Home : AppCompatActivity() {
     }
 
     override fun onStart() {
-        if (model.shouldAskForPermissions) {
-            model.onAskForPermissions()
+        if (model.isFirstLaunch) {
+            model.onFirstLaunch()
             requestPermissions()
+            registerGeofencesForActiveMemos()
         }
         super.onStart()
     }
@@ -170,6 +175,18 @@ internal class Home : AppCompatActivity() {
                     }
                     showToast(messageRes)
                 }
+        }
+    }
+
+    private fun registerGeofencesForActiveMemos() {
+        ScopeProvider.application.launch {
+            val activeMemos = Repository.getAll().filter { it.isDone.not() }
+
+            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) ==
+                PackageManager.PERMISSION_GRANTED
+            ) {
+                GeofenceHelper.registerAllGeofences(this@Home, activeMemos)
+            }
         }
     }
 }

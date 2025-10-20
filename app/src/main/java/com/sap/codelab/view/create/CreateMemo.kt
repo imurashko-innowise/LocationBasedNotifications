@@ -10,7 +10,6 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.maps.model.LatLng
@@ -150,8 +149,7 @@ internal class CreateMemo : AppCompatActivity() {
     }
 
     private fun registerGeofenceWithPermission(memo: Memo) {
-        val hasPermission = ContextCompat.checkSelfPermission(
-            this,
+        val hasPermission = checkSelfPermission(
             Manifest.permission.ACCESS_FINE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED
         if (hasPermission) {

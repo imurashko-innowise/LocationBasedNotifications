@@ -5,7 +5,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import androidx.core.content.ContextCompat
 import com.google.android.gms.location.GeofencingEvent
 import com.sap.codelab.view.notifications.NotificationsHelper
 import com.sap.codelab.repository.Repository
@@ -14,15 +13,14 @@ import kotlinx.coroutines.launch
 
 internal class GeofenceBroadcastReceiver : BroadcastReceiver() {
 
-    override fun onReceive(context: Context?, intent: Intent?) {
-        if (intent == null || context == null) return
+    override fun onReceive(context: Context, intent: Intent?) {
+        if (intent == null) return
         val geofencingEvent = GeofencingEvent.fromIntent(intent)
         val memoId = geofencingEvent?.triggeringGeofences?.firstOrNull()?.requestId?.toLongOrNull() ?: return
 
         ScopeProvider.application.launch {
             val memo = Repository.getMemoById(memoId)
-            val hasPermission = ContextCompat.checkSelfPermission(
-                context,
+            val hasPermission = context.checkSelfPermission(
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
 
