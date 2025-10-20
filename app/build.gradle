@@ -45,6 +45,7 @@ ext {
     roomVersion = '2.7.2'
     lifecycleVersion = '2.9.3'
     googleMapsVersion = '19.2.0'
+    googleLocationVersion = '21.3.0'
 }
 
 dependencies {
@@ -70,6 +71,7 @@ dependencies {
 
     // Google Maps
     implementation "com.google.android.gms:play-services-maps:$googleMapsVersion"
+    implementation "com.google.android.gms:play-services-location:$googleLocationVersion"
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.3.0'

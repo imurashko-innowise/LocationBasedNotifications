@@ -19,8 +19,8 @@ internal object Repository : IMemoRepository {
     }
 
     @WorkerThread
-    override fun saveMemo(memo: Memo) {
-        database.getMemoDao().insert(memo)
+    override fun saveMemo(memo: Memo): Long {
+        return database.getMemoDao().insert(memo)
     }
 
     @WorkerThread

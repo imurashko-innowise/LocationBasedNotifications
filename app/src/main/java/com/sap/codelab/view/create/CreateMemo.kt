@@ -1,20 +1,30 @@
 package com.sap.codelab.view.create
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.maps.model.LatLng
+import com.sap.codelab.view.geofencing.GeofenceHelper
+import com.sap.codelab.view.permissions.Permission
+import com.sap.codelab.view.permissions.PermissionManager
 import com.sap.codelab.R
 import com.sap.codelab.databinding.ActivityCreateMemoBinding
+import com.sap.codelab.model.Memo
 import com.sap.codelab.utils.extensions.empty
+import com.sap.codelab.utils.extensions.showToast
 import com.sap.codelab.view.locationpicker.LocationPicker
+import kotlinx.coroutines.launch
+import kotlin.jvm.java
 
 /**
  * Activity that allows a user to create a new Memo.
@@ -23,6 +33,7 @@ internal class CreateMemo : AppCompatActivity() {
 
     private lateinit var binding: ActivityCreateMemoBinding
     private lateinit var model: CreateMemoViewModel
+    private lateinit var permissionManager: PermissionManager
     private val mapPickerLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
@@ -32,7 +43,7 @@ internal class CreateMemo : AppCompatActivity() {
                 updateLocationInfo(it)
             }
         } else {
-            Toast.makeText(this, "No location selected", Toast.LENGTH_SHORT).show()
+            showToast(R.string.create_memo_no_location_selected)
         }
     }
     private var location: LatLng = LatLng(0.0, 0.0)
@@ -46,6 +57,13 @@ internal class CreateMemo : AppCompatActivity() {
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
         model = ViewModelProvider(this)[CreateMemoViewModel::class.java]
+        permissionManager = PermissionManager(
+            context = this,
+            registry = activityResultRegistry,
+            lifecycleOwner = this,
+        )
+
+        registerCollectors()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -67,6 +85,21 @@ internal class CreateMemo : AppCompatActivity() {
         }
     }
 
+    private fun registerCollectors() {
+        lifecycleScope.launch {
+            model.onMemoSaved.collect { savedMemo ->
+                permissionManager.setPermissions(Permission.Location)
+                    .requestPermissions { isGranted ->
+                        if (isGranted) {
+                            registerGeofenceWithPermission(savedMemo)
+                        } else {
+                            showMissingPermissionsToast()
+                        }
+                    }
+            }
+        }
+    }
+
     /**
      * Saves the memo if the input is valid; otherwise shows the corresponding error messages.
      */
@@ -82,8 +115,8 @@ internal class CreateMemo : AppCompatActivity() {
                 setResult(RESULT_OK)
                 finish()
             } else {
-                memoTitleContainer.error = getErrorMessage(model.hasTitleError(), R.string.memo_title_empty_error)
-                memoDescription.error = getErrorMessage(model.hasTextError(), R.string.memo_text_empty_error)
+                memoTitleContainer.error = getErrorMessage(model.hasTitleError(), R.string.create_memo_title_empty_error)
+                memoDescription.error = getErrorMessage(model.hasTextError(), R.string.create_memo_text_empty_error)
             }
         }
     }
@@ -104,8 +137,31 @@ internal class CreateMemo : AppCompatActivity() {
     }
 
     private fun openLocationPicker() {
-        val intent = Intent(this, LocationPicker::class.java)
-        mapPickerLauncher.launch(intent)
+        permissionManager
+            .setPermissions(Permission.Location)
+            .requestPermissions { isGranted ->
+                if (isGranted) {
+                    val intent = Intent(this, LocationPicker::class.java)
+                    mapPickerLauncher.launch(intent)
+                } else {
+                    showMissingPermissionsToast()
+                }
+            }
+    }
+
+    private fun registerGeofenceWithPermission(memo: Memo) {
+        val hasPermission = ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+        if (hasPermission) {
+            GeofenceHelper.registerGeofence(
+                context = this,
+                memo = memo,
+            )
+        } else {
+            showMissingPermissionsToast()
+        }
     }
 
     private fun Intent.getLocationData(): LatLng? {
@@ -123,4 +179,7 @@ internal class CreateMemo : AppCompatActivity() {
             locationLongitude.text = location.longitude.toString()
         }
     }
+
+    private fun showMissingPermissionsToast() =
+        showToast(R.string.create_memo_geofence_register_error)
 }

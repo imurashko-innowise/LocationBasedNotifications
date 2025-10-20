@@ -5,13 +5,13 @@
     <item
         android:id="@+id/action_show_all"
         android:orderInCategory="100"
-        android:title="@string/action_show_all"
+        android:title="@string/home_action_show_all"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/action_show_open"
         android:orderInCategory="110"
-        android:title="@string/action_show_open"
+        android:title="@string/home_action_show_open"
         android:visible="false"
         app:showAsAction="always"
         tools:ignore="AlwaysShowAction" />

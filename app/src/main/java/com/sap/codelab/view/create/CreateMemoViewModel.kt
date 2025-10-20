@@ -6,6 +6,8 @@ import com.sap.codelab.model.Memo
 import com.sap.codelab.repository.Repository
 import com.sap.codelab.utils.coroutines.ScopeProvider
 import com.sap.codelab.utils.extensions.empty
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
 
 /**
@@ -23,12 +25,16 @@ internal class CreateMemoViewModel : ViewModel() {
         isDone = false,
     )
 
+    private val _onMemoSaved: MutableSharedFlow<Memo> = MutableSharedFlow()
+    val onMemoSaved: SharedFlow<Memo> = _onMemoSaved
+
     /**
      * Saves the memo in it's current state.
      */
     fun saveMemo() {
         ScopeProvider.application.launch {
-            Repository.saveMemo(memo)
+            val memoId = Repository.saveMemo(memo)
+            _onMemoSaved.emit(memo.copy(id = memoId))
         }
     }
 

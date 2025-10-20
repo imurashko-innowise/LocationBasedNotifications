@@ -12,9 +12,11 @@ import kotlin.math.max
 /**
  * Adapter containing a set of memos.
  */
-internal class MemoAdapter(private val items: MutableList<Memo>,
-                           private val onClick: View.OnClickListener,
-                           private val onCheckboxChanged: CompoundButton.OnCheckedChangeListener) : RecyclerView.Adapter<MemoViewHolder>() {
+internal class MemoAdapter(
+    private val items: MutableList<Memo>,
+    private val onItemClick: View.OnClickListener,
+    private val onCheckboxChanged: CompoundButton.OnCheckedChangeListener,
+) : RecyclerView.Adapter<MemoViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewTypee: Int): MemoViewHolder {
         return MemoViewHolder(newItemViewBinding(parent))
@@ -22,7 +24,7 @@ internal class MemoAdapter(private val items: MutableList<Memo>,
 
     override fun onBindViewHolder(holder: MemoViewHolder, position: Int) {
         val memo = items[position]
-        holder.update(memo, onClick, onCheckboxChanged)
+        holder.update(memo, onItemClick, onCheckboxChanged)
     }
 
     override fun getItemCount(): Int = items.size

@@ -1,17 +1,28 @@
 <resources>
+    <!-- General -->
     <string name="app_name">SAP Codelab</string>
-    <string name="action_show_all">Show All</string>
-    <string name="action_show_open">Show Open</string>
-    <string name="memo_title">Title</string>
-    <string name="new_memo">New Memo</string>
-    <string name="location_label">Location</string>
-    <string name="location_latitude_label">Latitude: </string>
-    <string name="location_longitude_label">Longitude: </string>
-    <string name="memo_text">Text</string>
-    <string name="memo_location_default">0.0</string>
-    <string name="action_save">Save</string>
-    <string name="action_launch_location_picker">Change location</string>
-    <string name="confirm_location">Confirm location</string>
-    <string name="memo_title_empty_error">Please provide a title for this memo</string>
-    <string name="memo_text_empty_error">Please provide a memo description</string>
+
+    <!-- Home screen -->
+    <string name="home_action_show_all">Show All</string>
+    <string name="home_action_show_open">Show Open</string>
+    <string name="home_permissions_granted">All required permissions granted</string>
+    <string name="home_missing_permissions">Missing required permissions</string>
+
+    <!-- Create memo screen -->
+    <string name="create_memo_label">New Memo</string>
+    <string name="create_memo_title">Title</string>
+    <string name="create_memo_text">Text</string>
+    <string name="create_memo_location_label">Location</string>
+    <string name="create_memo_location_latitude_label">Latitude: </string>
+    <string name="create_memo_location_longitude_label">Longitude: </string>
+    <string name="create_memo_location_default">0.0</string>
+    <string name="create_memo_launch_location_picker">Change location</string>
+    <string name="create_memo_save">Save</string>
+    <string name="create_memo_title_empty_error">Please provide a title for this memo</string>
+    <string name="create_memo_text_empty_error">Please provide a memo description</string>
+    <string name="create_memo_no_location_selected">No location selected</string>
+    <string name="create_memo_geofence_register_error">Missing location permissions</string>
+
+    <!-- Location picker screen -->
+    <string name="location_picker_confirm_location">Confirm location</string>
 </resources>
